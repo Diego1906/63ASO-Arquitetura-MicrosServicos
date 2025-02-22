@@ -5,8 +5,8 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Statu
 	DROP TABLE [dbo].[StatusPedido]
 GO
 CREATE TABLE [dbo].[StatusPedido](
-	id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-	nome VARCHAR(50) NOT NULL
+	id INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- Identificador único para status de pedido
+	nome VARCHAR(50) NOT NULL  -- Nome do status de pedido
 );
 GO
 
@@ -15,12 +15,12 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Pedid
 	DROP TABLE [dbo].[Pedido]
 GO
 CREATE TABLE [dbo].[Pedido] (
-	id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-	conta_id INT NOT NULL,  -- Referência externa (Conta)
-	data_criacao DATETIME DEFAULT GETDATE(),
-	data_atualizacao DATETIME NULL,
-	status_pedido_id INT NOT NULL,
-	FOREIGN KEY (status_pedido_id) REFERENCES StatusPedido(id)
+	id INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- Identificador único para pedido
+	conta_id INT NOT NULL,  -- Identificador da conta associada. Referência externa (Conta)
+	data_criacao DATETIME DEFAULT GETDATE(),  -- Data de criação do pedido
+	data_atualizacao DATETIME NULL, -- Data de atualização do pedido
+	status_pedido_id INT NOT NULL,-- Identificador do status do pedido
+	FOREIGN KEY (status_pedido_id) REFERENCES StatusPedido(id) -- Chave estrangeira para a tabela StatusPedido
 );
 GO
 
@@ -29,13 +29,15 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Pedid
 	DROP TABLE [dbo].[PedidoItem]
 GO
 CREATE TABLE [dbo].[PedidoItem] (
-	id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-	pedido_id INT NOT NULL,
-	produto_id INT NOT NULL,  -- Referência externa (Produto)
-	quantidade INT NOT NULL CHECK (quantidade > 0),
-	preco_unitario DECIMAL(10,2) NOT NULL,
-	desconto DECIMAL(10,2) DEFAULT 0,
-	data_criacao DATETIME DEFAULT GETDATE(),
-	FOREIGN KEY (pedido_id) REFERENCES Pedido(id)
+	id INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- Identificador único para item do pedido
+	pedido_id INT NOT NULL, -- Identificador do pedido associado
+	produto_id INT NOT NULL,  -- Identificador do produto associado. Referência externa (Produto)
+	quantidade INT NOT NULL CHECK (quantidade > 0), -- Quantidade do produto no pedido
+	preco_individual DECIMAL(10, 2) NOT NULL, -- Preço individual do item no momento da criação do pedido
+	desconto_produto DECIMAL(5, 2), -- Desconto no produto
+	data_criacao DATETIME DEFAULT GETDATE(), -- Data de criação do item do pedido
+    data_atualizacao DATETIME, -- Data de atualização do item do pedido,
+	UNIQUE (pedido_id, produto_id), -- Garantir unicidade de produto no pedido
+	FOREIGN KEY (pedido_id) REFERENCES Pedido(id) -- Chave estrangeira para a tabela Pedido
 );
 GO

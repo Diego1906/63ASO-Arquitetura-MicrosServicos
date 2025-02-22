@@ -1,4 +1,4 @@
-USE Teste
+USE FiapStore_EntregaDataBase
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StatusEntrega]') AND type in (N'U'))
@@ -18,7 +18,7 @@ CREATE TABLE ModalidadeEntrega (
     id INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- Identificador único para modalidade de entrega
     nome VARCHAR(50) NOT NULL, -- Nome da modalidade de entrega
     prazo_entrega INT NOT NULL, -- Prazo de entrega em dias
-    entrega_rapida_id VARCHAR(100) UNIQUE -- Referência externa - ID correspondente da Entrega Rápida (Serviço em Nuvem)
+    entrega_rapida_id VARCHAR(100) UNIQUE -- ID correspondente da Entrega Rápida. Referência externa (Serviço em Nuvem)
 );
 GO
 
@@ -27,7 +27,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Promo
 	DROP TABLE [dbo].[PromocaoModalidadeEntrega]
 GO
 CREATE TABLE PromocaoModalidadeEntrega (
-    promocao_id INT NOT NULL, -- Referência externa (Promocao)
+    promocao_id INT NOT NULL, -- Identificador da promoção associada. Referência externa (Promocao)
     modalidade_id INT NOT NULL UNIQUE, -- Identificador da modalidade de entrega associada (único)
     data_criacao DATETIME DEFAULT GETDATE(), -- Data de criação da associação
     PRIMARY KEY (promocao_id, modalidade_id), -- Chave primária composta
@@ -41,7 +41,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Entre
 GO
 CREATE TABLE Entrega (
     id INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- Identificador único para entrega
-    pedido_id INT NOT NULL, -- -- Referência externa (Pedido)
+    pedido_id INT NOT NULL, -- Identificador do pedido associado. Referência externa (Pedido)
     status_id INT NOT NULL, -- Identificador do status da entrega
     modalidade_id INT NOT NULL, -- Identificador da modalidade de entrega
     custo_frete DECIMAL(10, 2) NOT NULL, -- Custo do frete
@@ -49,7 +49,7 @@ CREATE TABLE Entrega (
     data_criacao DATETIME DEFAULT GETDATE(), -- Data de criação da entrega
     data_atualizacao DATETIME, -- Data de atualização da entrega
 	data_prevista DATETIME, -- Data prevista para a entrega
-    pedido_entrega_rapida_id VARCHAR(100), -- ID do pedido de entrega solicitado na Entrega Rápida
+    pedido_entrega_rapida_id VARCHAR(100), -- ID do pedido de entrega solicitado na Entrega Rápida. Referência externa (Serviço em Nuvem)
     endereco_entrega VARCHAR(255) NOT NULL, -- Endereço de entrega
     FOREIGN KEY (modalidade_id) REFERENCES ModalidadeEntrega(id), -- Chave estrangeira para a tabela ModalidadeEntrega
     FOREIGN KEY (status_id) REFERENCES StatusEntrega(id) -- Chave estrangeira para a tabela StatusEntrega
