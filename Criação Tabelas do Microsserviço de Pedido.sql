@@ -1,4 +1,4 @@
-USE Teste
+USE FiapStore_PedidoDataBase
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StatusPedido]') AND type in (N'U'))
@@ -12,11 +12,11 @@ GO
 
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Pedido]') AND type in (N'U'))
-	DROP TABLE [dbo].Pedido
+	DROP TABLE [dbo].[Pedido]
 GO
 CREATE TABLE [dbo].[Pedido] (
 	id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-	conta_id INT NOT NULL,  -- Referência externa (Cliente)
+	conta_id INT NOT NULL,  -- Referência externa (Conta)
 	data_criacao DATETIME DEFAULT GETDATE(),
 	data_atualizacao DATETIME NULL,
 	status_pedido_id INT NOT NULL,
