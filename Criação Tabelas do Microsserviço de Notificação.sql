@@ -1,4 +1,4 @@
-USE Teste
+USE FiapStore_NotificacaoDataBase
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StatusNotificacao]') AND type in (N'U'))
@@ -28,7 +28,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Notif
 GO
 CREATE TABLE Notificacao (
     id INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- Identificador único para notificação
-    conta_id INT NOT NULL, -- Referência externa (Conta)
+    conta_id INT NOT NULL, -- Identificador da conta associada. Referência externa (Conta)
     template_id INT NOT NULL, -- Identificador do template de notificação
     mensagem_variaveis TEXT NOT NULL, -- JSON com as variáveis da mensagem
     tipo VARCHAR(50) NOT NULL, -- Tipo de notificação: 'sms', 'email', 'push'
