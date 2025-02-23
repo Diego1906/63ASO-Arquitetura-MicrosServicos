@@ -10,7 +10,7 @@ CREATE TABLE MetodoPagamento (
     nome VARCHAR(50) NOT NULL, -- Nome do método de pagamento
     paguei_id VARCHAR(100) NOT NULL UNIQUE -- ID correspondente na Paguei. Referência externa (Serviço em Nuvem) 
 );
-
+GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StatusPagamento]') AND type in (N'U'))
 	DROP TABLE [dbo].[StatusPagamento]
@@ -19,6 +19,7 @@ CREATE TABLE StatusPagamento (
     id INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- Identificador único para status de pagamento
     nome VARCHAR(50) NOT NULL -- Nome do status de pagamento
 );
+GO
 
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Pagamento]') AND type in (N'U'))
@@ -37,6 +38,7 @@ CREATE TABLE Pagamento (
     FOREIGN KEY (metodo_pagamento_id) REFERENCES MetodoPagamento(id), -- Chave estrangeira para a tabela MetodoPagamento
     FOREIGN KEY (status_id) REFERENCES StatusPagamento(id) -- Chave estrangeira para a tabela StatusPagamento
 );
+GO
 
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PromocaoMetodoPagamento]') AND type in (N'U'))
